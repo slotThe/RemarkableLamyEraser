@@ -357,80 +357,84 @@ void setAssumeTBOpen(bool new) {
 
 // Test stored locations in effects_data.h
 void test_locations(int fd) {
-  const char *str[4];
-  str[0] = "Right Hand Portrait";
-  str[1] = "Right Hand Landscape";
-  str[2] = "Left Hand Portrait";
-  str[3] = "Left Hand Landscape";
+  const char *tb_pos_str[2] = {"Left Toolbar", "Top Toolbar"};
+  const char *orient_str[4] = {
+    "Right Hand Portrait",
+    "Right Hand Landscape",
+    "Left Hand Portrait",
+    "Left Hand Landscape",
+  };
 
-  for (int i = 0; i < 4; i++) {
-    printf("Please set notebook to %s orientation. Close the tool bar and draw "
-           "a large circle.\n"
-           "When ready, press enter\n",
-           str[i]);
-    getchar(); // pauses until user presses enter
+  for (int tb = 0; tb < 2; tb++) {
+    for (int i = 0; i < 4; i++) {
+      printf("Please set notebook to %s, %s orientation. Close the tool bar "
+             "and draw a large circle.\n"
+             "When ready, press enter\n",
+             tb_pos_str[tb], orient_str[i]);
+      getchar(); // pauses until user presses enter
 
-    printf("opening Toolbar...\n");
-    write_oriented_tap_sequence(fd, 1, TOOLBAR);
-    getchar();
+      printf("opening Toolbar...\n");
+      write_oriented_tap_sequence(fd, 1, TOOLBAR);
+      getchar();
 
-    printf("tapping writing utensil 2...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING2);
-    getchar();
+      printf("tapping writing utensil 2...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING2);
+      getchar();
 
-    printf("tapping writing utensil 1 twice...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING1);
-    write_oriented_tap_sequence(fd, 1, WRITING1);
-    getchar();
+      printf("tapping writing utensil 1 twice...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING1);
+      write_oriented_tap_sequence(fd, 1, WRITING1);
+      getchar();
 
-    printf("tapping fineliner...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING_FINELINER);
-    getchar();
+      printf("tapping fineliner...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING_FINELINER);
+      getchar();
 
-    printf("tapping calligraphy pen...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING_CALLIGRAPHY);
-    getchar();
+      printf("tapping calligraphy pen...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING_CALLIGRAPHY);
+      getchar();
 
-    printf("tapping black...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING_BLACK);
-    getchar();
+      printf("tapping black...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING_BLACK);
+      getchar();
 
-    printf("tapping grey...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING_GREY);
-    getchar();
+      printf("tapping grey...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING_GREY);
+      getchar();
 
-    printf("tapping hl...\n");
-    write_oriented_tap_sequence(fd, 1, WRITING_HL);
-    getchar();
+      printf("tapping hl...\n");
+      write_oriented_tap_sequence(fd, 1, WRITING_HL);
+      getchar();
 
-    printf("tapping eraser panel...\n");
-    write_oriented_tap_sequence(fd, 1, ERASER_PANEL);
-    getchar();
+      printf("tapping eraser panel...\n");
+      write_oriented_tap_sequence(fd, 1, ERASER_PANEL);
+      getchar();
 
-    printf("tapping eraser panel...\n");
-    write_oriented_tap_sequence(fd, 1, ERASER_PANEL);
-    getchar();
+      printf("tapping eraser panel...\n");
+      write_oriented_tap_sequence(fd, 1, ERASER_PANEL);
+      getchar();
 
-    printf("tapping erase selection...\n");
-    write_oriented_tap_sequence(fd, 1, ERASER_SELECTION);
-    getchar();
+      printf("tapping erase selection...\n");
+      write_oriented_tap_sequence(fd, 1, ERASER_SELECTION);
+      getchar();
 
-    printf("tapping eraser...\n");
-    write_oriented_tap_sequence(fd, 1, ERASER_ERASE);
-    getchar();
+      printf("tapping eraser...\n");
+      write_oriented_tap_sequence(fd, 1, ERASER_ERASE);
+      getchar();
 
-    printf("tapping select tool...\n");
-    write_oriented_tap_sequence(fd, 1, SELECT);
-    getchar();
+      printf("tapping select tool...\n");
+      write_oriented_tap_sequence(fd, 1, SELECT);
+      getchar();
 
-    printf("tapping undo...\n");
-    write_oriented_tap_sequence(fd, 1, UNDO);
-    getchar();
+      printf("tapping undo...\n");
+      write_oriented_tap_sequence(fd, 1, UNDO);
+      getchar();
 
-    printf("tapping redo...\n");
-    write_oriented_tap_sequence(fd, 1, REDO);
+      printf("tapping redo...\n");
+      write_oriented_tap_sequence(fd, 1, REDO);
 
-    printf("Completed %s.\n", str[i]);
+      printf("Completed %s, %s.\n", tb_pos_str[tb], orient_str[i]);
+    }
   }
   printf("Completed all orientations.\n");
   exit(EXIT_SUCCESS);
