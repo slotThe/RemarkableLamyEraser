@@ -24,15 +24,13 @@ wget https://raw.githubusercontent.com/slotThe/RemarkableLamyEraser/main/config/
 echo "Creating directory for configuration file..."
 mkdir -p ~/.config/LamyEraser
 
-if [ -f ~/.config/LamyEraser/LamyEraser.conf ]
- then
-   echo "Previous .conf file found... preserving as LamyEraser.conf.old"
-   # ask before perhaps overwriting legacy config
-   mv -i ~/.config/LamyEraser/LamyEraser.conf ~/.config/LamyEraser/LamyEraser.conf.old
+if [ -f ~/.config/LamyEraser/LamyEraser.conf ]; then
+    echo "Previous .conf file found... saving NEW config as LamyEraser.conf.new"
+    mv LamyEraser.conf ~/.config/LamyEraser/LamyEraser.conf.new
+else
+    echo "Saving config in ~/.config/LamyEraser/LamyEraser.conf"
+    mv LamyEraser.conf ~/.config/LamyEraser/
 fi
-
-echo "Placing configuration file... ~/.config/LamyEraser/LamyEraser.conf"
-mv LamyEraser.conf ~/.config/LamyEraser/
 
 read -p "Would you like to edit your configuration now? [y/n]" -n 1 -r
 echo
