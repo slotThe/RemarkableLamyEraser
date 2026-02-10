@@ -88,9 +88,9 @@ int get_conf(const char *path, const char *param, char *return_string, int buffe
   return -1;
 }
 
-toolbar_orientation get_toolbar_orientation() {
+toolbar_t get_toolbar_t() {
   char                filename[BUFSIZE];
-  toolbar_orientation orientation = {RHP, no_open_document};
+  toolbar_t orientation = {RHP, TB_LEFT, no_open_document};
   if (get_open_file_uuid(filename)) { // success
     char open_file_path[128] = "/home/root/.local/share/remarkable/xochitl/";
     strcat(filename, ".content");

@@ -75,7 +75,7 @@ void write_tap_with_touch(int fd_touch, const int location[2]) {
   write_event(fd_touch, event);
 }
 
-void write_oriented_tap(int fd, toolbar_orientation orientation, int action) {
+void write_oriented_tap(int fd, toolbar_t orientation, int action) {
   int     actionLocation[2];
   if (action == SLEEP) {
     usleep(50000);
@@ -97,7 +97,7 @@ int write_oriented_tap_sequence(int fd, int numLocations, ...) {
   int     action;
   va_list actionType;
   va_start(actionType, numLocations);
-  toolbar_orientation orientation = get_toolbar_orientation();
+  toolbar_t orientation = get_toolbar_t();
 
   for (int i = 0; i < numLocations; i++) {
     action = va_arg(actionType, int);
@@ -109,7 +109,7 @@ int write_oriented_tap_sequence(int fd, int numLocations, ...) {
 }
 
 int write_oriented_tap_sequence_toolbar(int fd, int numLocations, ...) {
-  toolbar_orientation orientation = get_toolbar_orientation();
+  toolbar_t orientation = get_toolbar_t();
 
   int action;
   va_list actionType;
