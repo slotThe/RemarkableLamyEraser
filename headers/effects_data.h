@@ -67,52 +67,103 @@ static const char* EFFECTS[NUM_EFFECTS] = {
 #define T_RM2_LHX 1360
 #define T_RM2_LHY 1820
 
-static const int LOCATION_LOOKUP_TOUCH[2][NUM_EFFECTS][4][2] = {
+// [doc_type][toolbar_pos][effect][orientation][x/y]
+static const int LOCATION_LOOKUP_TOUCH[2][2][NUM_EFFECTS][4][2] = {
   {//NOTEBOOK
-   // RHP                RHL                LHP                LHL
-    { {        0,    0}, {   0,         0}, {        0,    0}, {   0,         0} }, //NULL_EFFECT          0
-    { {T_RM2_RHX, 1850}, {  30, T_RM2_RHY}, {T_RM2_LHX, 1810}, {  80, T_RM2_LHY} }, //TOOLBAR              1
-    { {T_RM2_RHX, 1720}, { 150, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 1            2
-    { {T_RM2_RHX, 1620}, { 250, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 2            3
-    { {T_RM2_RHX, 1510}, { 350, T_RM2_RHY}, {T_RM2_LHX, 1600}, { 270, T_RM2_LHY} }, //TEXT                 4
-    { {T_RM2_RHX, 1410}, { 460, T_RM2_RHY}, {T_RM2_LHX, 1510}, { 360, T_RM2_LHY} }, //ERASER_PANEL         5
-    { {T_RM2_RHX, 1300}, { 570, T_RM2_RHY}, {T_RM2_LHX, 1410}, { 440, T_RM2_LHY} }, //SELECT               6
-    { {T_RM2_RHX, 1190}, { 670, T_RM2_RHY}, {T_RM2_LHX, 1300}, { 550, T_RM2_LHY} }, //UNDO                 7
-    { {T_RM2_RHX, 1090}, { 770, T_RM2_RHY}, {T_RM2_LHX, 1190}, { 670, T_RM2_LHY} }, //REDO                 8
-    { {      180, 1340}, { 530,       160}, {     1000, 1440}, { 430,      1450} }, //ERASER_ERASE         9
-    { {      250, 1480}, { 540,       300}, {     1140, 1440}, { 430,      1580} }, //ERASER_SELECTION    10
-    { {      200, 1380}, { 670,       160}, {     1050, 1280}, { 670,      1480} }, //ERASER_ERASE_ALL    11
-    { {      340, 1630}, { 230,       350}, {     1010, 1640}, { 230,      1480} }, //WRITING_FINELINER   12
-    { {      470, 1540}, { 330,       490}, {     1220, 1530}, { 330,      1680} }, //WRITING_CALLIGRAPHY 13
-    { {      200, 1050}, { 840,       200}, {      900, 1120}, { 730,      1380} }, //WRITING_BLACK       14
-    { {      330, 1050}, { 840,       340}, {     1020, 1140}, { 730,      1480} }, //WRITING_GREY        15
-    { {      470, 1630}, { 230,       490}, {      900, 1530}, { 330,      1370} }, //WRITING_HL          16
-    {}, // ONE_OFF_ERASER_SELECTION (same as ERASER_SELECTION) 17
-    {}, // ONE_OFF_ERASER           (same as ERASER)           18
-    {}, // ONE_OFF_HL (same as WRITING_HL)                     19
+    {//TB_LEFT
+     // RHP                RHL                LHP                LHL
+      { {        0,    0}, {   0,         0}, {        0,    0}, {   0,         0} }, //NULL_EFFECT          0
+      { {T_RM2_RHX, 1850}, {  30, T_RM2_RHY}, {T_RM2_LHX, 1810}, {  80, T_RM2_LHY} }, //TOOLBAR              1
+      { {T_RM2_RHX, 1720}, { 150, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 1            2
+      { {T_RM2_RHX, 1620}, { 250, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 2            3
+      { {T_RM2_RHX, 1510}, { 350, T_RM2_RHY}, {T_RM2_LHX, 1600}, { 270, T_RM2_LHY} }, //TEXT                 4
+      { {T_RM2_RHX, 1410}, { 460, T_RM2_RHY}, {T_RM2_LHX, 1510}, { 360, T_RM2_LHY} }, //ERASER_PANEL         5
+      { {T_RM2_RHX, 1300}, { 570, T_RM2_RHY}, {T_RM2_LHX, 1410}, { 440, T_RM2_LHY} }, //SELECT               6
+      { {T_RM2_RHX, 1190}, { 670, T_RM2_RHY}, {T_RM2_LHX, 1300}, { 550, T_RM2_LHY} }, //UNDO                 7
+      { {T_RM2_RHX, 1090}, { 770, T_RM2_RHY}, {T_RM2_LHX, 1190}, { 670, T_RM2_LHY} }, //REDO                 8
+      { {      180, 1340}, { 530,       160}, {     1000, 1440}, { 430,      1450} }, //ERASER_ERASE         9
+      { {      250, 1480}, { 540,       300}, {     1140, 1440}, { 430,      1580} }, //ERASER_SELECTION    10
+      { {      200, 1380}, { 670,       160}, {     1050, 1280}, { 670,      1480} }, //ERASER_ERASE_ALL    11
+      { {      340, 1630}, { 230,       350}, {     1010, 1640}, { 230,      1480} }, //WRITING_FINELINER   12
+      { {      470, 1540}, { 330,       490}, {     1220, 1530}, { 330,      1680} }, //WRITING_CALLIGRAPHY 13
+      { {      200, 1050}, { 840,       200}, {      900, 1120}, { 730,      1380} }, //WRITING_BLACK       14
+      { {      330, 1050}, { 840,       340}, {     1020, 1140}, { 730,      1480} }, //WRITING_GREY        15
+      { {      470, 1630}, { 230,       490}, {      900, 1530}, { 330,      1370} }, //WRITING_HL          16
+      {}, // ONE_OFF_ERASER_SELECTION (same as ERASER_SELECTION) 17
+      {}, // ONE_OFF_ERASER           (same as ERASER)           18
+      {}, // ONE_OFF_HL (same as WRITING_HL)                     19
+    },
+    {//TB_TOP
+     // RHP                RHL                LHP                LHL
+      { {     0,    0}, {   0,    0}, {     0,    0}, {   0,    0} }, //NULL_EFFECT          0
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //TOOLBAR              1
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING 1            2
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING 2            3
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //TEXT                 4
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_PANEL         5
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //SELECT               6
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //UNDO                 7
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //REDO                 8
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_ERASE         9
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_SELECTION    10
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_ERASE_ALL    11
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_FINELINER   12
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_CALLIGRAPHY 13
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_BLACK       14
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_GREY        15
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_HL          16
+      {}, // ONE_OFF_ERASER_SELECTION (same as ERASER_SELECTION) 17
+      {}, // ONE_OFF_ERASER           (same as ERASER)           18
+      {}, // ONE_OFF_HL (same as WRITING_HL)                     19
+    },
   },
   {//PDF
-   // RHP                RHL                LHP                LHL
-    { {        0,    0}, {   0,         0}, {        0,    0}, {   0,         0} }, //NULL_EFFECT          0
-    { {T_RM2_RHX, 1850}, {  60, T_RM2_RHY}, {T_RM2_LHX, 1810}, {  80, T_RM2_LHY} }, //TOOLBAR              1
-    { {T_RM2_RHX, 1720}, { 150, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 1            2
-    { {T_RM2_RHX, 1620}, { 250, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 2            3
-    { {        0,    0}, {   0,         0}, {        0,    0}, {   0,         0} }, //TEXT                 4
-    { {T_RM2_RHX, 1510}, { 350, T_RM2_RHY}, {T_RM2_LHX, 1600}, { 270, T_RM2_LHY} }, //ERASER_PANEL         5
-    { {T_RM2_RHX, 1410}, { 460, T_RM2_RHY}, {T_RM2_LHX, 1510}, { 360, T_RM2_LHY} }, //SELECT               6
-    { {T_RM2_RHX, 1300}, { 570, T_RM2_RHY}, {T_RM2_LHX, 1410}, { 470, T_RM2_LHY} }, //UNDO                 7
-    { {T_RM2_RHX, 1190}, { 670, T_RM2_RHY}, {T_RM2_LHX, 1300}, { 580, T_RM2_LHY} }, //REDO                 8
-    { {      180, 1440}, { 410,       160}, {     1000, 1530}, { 340,      1450} }, //ERASER_ERASE         9
-    { {      250, 1470}, { 410,       300}, {     1140, 1530}, { 340,      1580} }, //ERASER_SELECTION    10
-    { {      200, 1300}, { 580,       160}, {     1050, 1400}, { 580,      1480} }, //ERASER_ERASE_ALL    11
-    { {      340, 1630}, { 230,       350}, {     1010, 1640}, { 230,      1480} }, //WRITING_FINELINER   12
-    { {      470, 1540}, { 330,       490}, {     1220, 1530}, { 330,      1680} }, //WRITING_CALLIGRAPHY 13
-    { {      200, 1050}, { 840,       200}, {      900, 1120}, { 730,      1380} }, //WRITING_BLACK       14
-    { {      330, 1050}, { 840,       340}, {     1020, 1140}, { 730,      1480} }, //WRITING_GREY        15
-    { {      470, 1630}, { 330,       490}, {      900, 1530}, { 330,      1370} }, //WRITING_HL          16
-    {}, // ONE_OFF_ERASER_SELECTION (same as ERASER_SELECTION) 17
-    {}, // ONE_OFF_ERASER           (same as ERASER)           18
-    {}, // ONE_OFF_HL (same as WRITING_HL)                     19
+    {//TB_LEFT
+     // RHP                RHL                LHP                LHL
+      { {        0,    0}, {   0,         0}, {        0,    0}, {   0,         0} }, //NULL_EFFECT          0
+      { {T_RM2_RHX, 1850}, {  60, T_RM2_RHY}, {T_RM2_LHX, 1810}, {  80, T_RM2_LHY} }, //TOOLBAR              1
+      { {T_RM2_RHX, 1720}, { 150, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 1            2
+      { {T_RM2_RHX, 1620}, { 250, T_RM2_RHY}, {T_RM2_LHX, 1700}, { 160, T_RM2_LHY} }, //WRITING 2            3
+      { {        0,    0}, {   0,         0}, {        0,    0}, {   0,         0} }, //TEXT                 4
+      { {T_RM2_RHX, 1510}, { 350, T_RM2_RHY}, {T_RM2_LHX, 1600}, { 270, T_RM2_LHY} }, //ERASER_PANEL         5
+      { {T_RM2_RHX, 1410}, { 460, T_RM2_RHY}, {T_RM2_LHX, 1510}, { 360, T_RM2_LHY} }, //SELECT               6
+      { {T_RM2_RHX, 1300}, { 570, T_RM2_RHY}, {T_RM2_LHX, 1410}, { 470, T_RM2_LHY} }, //UNDO                 7
+      { {T_RM2_RHX, 1190}, { 670, T_RM2_RHY}, {T_RM2_LHX, 1300}, { 580, T_RM2_LHY} }, //REDO                 8
+      { {      180, 1440}, { 410,       160}, {     1000, 1530}, { 340,      1450} }, //ERASER_ERASE         9
+      { {      250, 1470}, { 410,       300}, {     1140, 1530}, { 340,      1580} }, //ERASER_SELECTION    10
+      { {      200, 1300}, { 580,       160}, {     1050, 1400}, { 580,      1480} }, //ERASER_ERASE_ALL    11
+      { {      340, 1630}, { 230,       350}, {     1010, 1640}, { 230,      1480} }, //WRITING_FINELINER   12
+      { {      470, 1540}, { 330,       490}, {     1220, 1530}, { 330,      1680} }, //WRITING_CALLIGRAPHY 13
+      { {      200, 1050}, { 840,       200}, {      900, 1120}, { 730,      1380} }, //WRITING_BLACK       14
+      { {      330, 1050}, { 840,       340}, {     1020, 1140}, { 730,      1480} }, //WRITING_GREY        15
+      { {      470, 1630}, { 330,       490}, {      900, 1530}, { 330,      1370} }, //WRITING_HL          16
+      {}, // ONE_OFF_ERASER_SELECTION (same as ERASER_SELECTION) 17
+      {}, // ONE_OFF_ERASER           (same as ERASER)           18
+      {}, // ONE_OFF_HL (same as WRITING_HL)                     19
+    },
+    {//TB_TOP
+     // RHP                RHL                LHP                LHL
+      { {     0,    0}, {   0,    0}, {     0,    0}, {   0,    0} }, //NULL_EFFECT          0
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //TOOLBAR              1
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING 1            2
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING 2            3
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //TEXT                 4
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_PANEL         5
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //SELECT               6
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //UNDO                 7
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //REDO                 8
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_ERASE         9
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_SELECTION    10
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //ERASER_ERASE_ALL    11
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_FINELINER   12
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_CALLIGRAPHY 13
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_BLACK       14
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_GREY        15
+      { {  0000, 0000}, {0000, 0000}, {  0000, 0000}, {0000, 0000} }, //WRITING_HL          16
+      {}, // ONE_OFF_ERASER_SELECTION (same as ERASER_SELECTION) 17
+      {}, // ONE_OFF_ERASER           (same as ERASER)           18
+      {}, // ONE_OFF_HL (same as WRITING_HL)                     19
+    },
   }
 };
 

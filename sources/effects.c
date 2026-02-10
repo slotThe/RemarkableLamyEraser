@@ -84,9 +84,11 @@ void write_oriented_tap(int fd, toolbar_t orientation, int action) {
   } else if (action == LONG_SLEEP) {
     usleep(550000);
   } else {
-    actionLocation[0] = LOCATION_LOOKUP_TOUCH[orientation.doc_type][action]
+    actionLocation[0] = LOCATION_LOOKUP_TOUCH[orientation.doc_type]
+                                             [orientation.toolbar_pos][action]
                                              [orientation.orientation][0];
-    actionLocation[1] = LOCATION_LOOKUP_TOUCH[orientation.doc_type][action]
+    actionLocation[1] = LOCATION_LOOKUP_TOUCH[orientation.doc_type]
+                                             [orientation.toolbar_pos][action]
                                              [orientation.orientation][1];
     write_tap_with_touch(fd, actionLocation);
   }
