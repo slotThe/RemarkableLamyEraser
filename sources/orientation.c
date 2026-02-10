@@ -49,10 +49,13 @@ int check_conf(const char *path, const char *param, const char *param_true) {
     if (!strncmp(line, param, strlen(param))) {
       // printf("%s", line);
       int value = !strncmp(line, param_true, strlen(param_true));
+      free(line);
       fclose(fp);
       return value;
     }
   }
+  free(line);
+  fclose(fp);
   return -1;
 }
 
@@ -89,23 +92,25 @@ int get_conf(const char *path, const char *param, char *return_string, int buffe
 }
 
 toolbar_t get_toolbar_t() {
-  char                filename[BUFSIZE];
-  toolbar_t orientation = {RHP, TB_LEFT, no_open_document};
-  if (get_open_file_uuid(filename)) { // success
-    char open_file_path[128] = "/home/root/.local/share/remarkable/xochitl/";
-    strcat(filename, ".content");
-    strcat(open_file_path, filename);
-    // Document type
-    orientation.doc_type =
-        check_conf(open_file_path, "    \"fileType\"", "    \"fileType\": \"pdf\"");
-    // Orientation
-    int portrait            = check_conf(open_file_path, "    \"orientation\"",
-                                         "    \"orientation\": \"portrait\"");
-    int right_handed        = check_conf("/home/root/.config/remarkable/xochitl.conf",
-                                         "RightHanded", "RightHanded=true");
-    orientation.orientation = !portrait + (!right_handed << 1);
-  }
-  return orientation;
+  static const char *xochitl_conf = "/home/root/.config/remarkable/xochitl.conf";
+  static const char *xochitl_dir  = "/home/root/.local/share/remarkable/xochitl/";
+  toolbar_t tb = {RHP, TB_LEFT, no_open_document};
+  char uuid[BUFSIZE];
+  if (!get_open_file_uuid(uuid))
+    return tb;
+  char content_path[128];
+  snprintf(content_path, sizeof(content_path), "%s%s.content", xochitl_dir, uuid);
+  // Document type
+  tb.doc_type = check_conf(content_path, "    \"fileType\"", "    \"fileType\": \"pdf\"");
+  // Orientation
+  int portrait = check_conf(content_path, "    \"orientation\"", "    \"orientation\": \"portrait\"");
+  int right_handed = check_conf(xochitl_conf, "RightHanded", "RightHanded=true");
+  tb.orientation = !portrait + (!right_handed << 1);
+  // Toolbar position
+  char *tb_param = portrait ? "ToolbarPortraitPosition"     : "ToolbarLandscapePosition";
+  char *tb_top   = portrait ? "ToolbarPortraitPosition=Top" : "ToolbarLandscapePosition=Top";
+  tb.toolbar_pos = check_conf(xochitl_conf, tb_param, tb_top) == 1 ? TB_TOP : TB_LEFT;
+  return tb;
 }
 
 int get_rm_version() {
