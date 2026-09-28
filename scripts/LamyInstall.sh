@@ -7,7 +7,7 @@ clear
 cd ~/ || exit
 
 systemctl stop LamyEraser.service
-systemctl disable LamyEraser.service > /dev/null/
+systemctl disable LamyEraser.service > /dev/null
 
 echo "Downloading RemarkableLamyEraser Executable..."
 cd /usr/sbin || exit
