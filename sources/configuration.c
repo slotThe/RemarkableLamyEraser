@@ -13,7 +13,7 @@ int get_trigger_config(const char *path, struct configuration *config) {
   // returns 1 if error in configuration file
   //  returns -1 if configuration file doesn't exist
   FILE   *fp;
-  char   *line;
+  char   *line = NULL;
   int     lineNum = 0;
   size_t  len     = 0;
   ssize_t read;

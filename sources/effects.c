@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -19,7 +20,8 @@
 void write_event(int fd, struct input_event event) {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  event.time = tv;
+  event.input_event_sec = tv.tv_sec;
+  event.input_event_usec = tv.tv_usec;
   // printf("writing: seconds = %ld, usec= %ld, type = %d, code = %d, value = %d\n", event.time.tv_sec, event.time.tv_usec, event.type, event.code, event.value);
   write(fd, &event, sizeof(struct input_event));
 }

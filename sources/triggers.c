@@ -1,6 +1,6 @@
-#include <bits/types/struct_timeval.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 #include "triggers.h"
 
@@ -35,13 +35,17 @@ int get_triggger(struct input_event *ev_pen) {
   static bool           possiblyLiftedGotClick;
   static bool           possiblyLiftedGotContact;
 
+  struct timeval currentTime = {
+    .tv_sec = ev_pen->input_event_sec,
+    .tv_usec = ev_pen->input_event_usec,
+  };
   int trigger = NULL_TRIGGER;
 
   if (abort) {
     if (!(ev_pen->code == EV_SYN || ev_pen->code == BTN_STYLUS)) { // BTN_TOOL_PEN = 0 is followed by EV_SYN and (possibly) BTN_STYLUS when pulling away pen
       abort = false;
 
-      double elapsedTime = getTimeDelta(&(ev_pen->time), &abortTime);
+      double elapsedTime = getTimeDelta(&currentTime, &abortTime);
       if (elapsedTime > MAX_CYCLE_TIME) {
         // the pen moved away from the screen, and has just re-approached; abort and reset state
         // printf("Event: ABORT...\n");
@@ -64,12 +68,12 @@ int get_triggger(struct input_event *ev_pen) {
   }
 
   if (ev_pen->code == BTN_TOOL_PEN && ev_pen->value == 0) { // indicates that pen was pulled away from screen, initiate abort sequence
-    abortTime = ev_pen->time;
+    abortTime = currentTime;
     abort = true;
   }
 
   if (possiblyLifted) {
-    double elapsedTime = getTimeDelta(&(ev_pen->time), &possiblyLiftedTime);
+    double elapsedTime = getTimeDelta(&currentTime, &possiblyLiftedTime);
 
     if (elapsedTime > MAX_CONTACT_CLICK_TIME) {
 
@@ -110,7 +114,7 @@ int get_triggger(struct input_event *ev_pen) {
 
       // don't register lift immediately to ignore spurious signals
       // when pressing button with pen on screen
-      if (!possiblyLifted) possiblyLiftedTime = ev_pen->time;
+      if (!possiblyLifted) possiblyLiftedTime = currentTime;
       possiblyLifted = true;
     }
   } else {
@@ -127,7 +131,7 @@ int get_triggger(struct input_event *ev_pen) {
   if (ev_pen->code != EV_SYN && possiblyReleased) {
     possiblyReleased = false;
 
-    double elapsedTime = getTimeDelta(&(ev_pen->time), &possiblyReleasedTime);
+    double elapsedTime = getTimeDelta(&currentTime, &possiblyReleasedTime);
     if (elapsedTime < MAX_CYCLE_TIME) {
       // if we recieved a non-sync code within a short enough delay, this was a genuine button release (i.e. not a press-and-pull-away)
       released = true;
@@ -137,7 +141,7 @@ int get_triggger(struct input_event *ev_pen) {
   if (ev_pen->code == BTN_STYLUS && ev_pen->value == 0) {
     // don't register release immediately to ignore spurious signals
     // when moving pen away from screen with button pressed
-    possiblyReleasedTime = ev_pen->time;
+    possiblyReleasedTime = currentTime;
     possiblyReleased = true;
   }
 
@@ -148,7 +152,7 @@ int get_triggger(struct input_event *ev_pen) {
 
   if (ev_pen->code == BTN_STYLUS && ev_pen->value == 1) {
     if (!contact) {
-      prevTime = ev_pen->time; // update most recent time
+      prevTime = currentTime; // update most recent time
       clicks += 1;
       // don't set the trigger as we don't have enough
       // info to ascertain the state yet.
@@ -167,7 +171,7 @@ int get_triggger(struct input_event *ev_pen) {
   }
 
   if (clicks > 0) {
-    double elapsedTime = getTimeDelta(&(ev_pen->time), &prevTime);  // time between presses of button
+    double elapsedTime = getTimeDelta(&currentTime, &prevTime);  // time between presses of button
     if (elapsedTime < MAX_CLICK_TIME) {
       if (released) {
         // printf("Click Detected\n");
