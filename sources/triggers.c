@@ -4,7 +4,7 @@
 
 #include "triggers.h"
 
-inline double getTimeDelta(struct timeval *current, struct timeval *prev) {
+static inline double getTimeDelta(struct timeval *current, struct timeval *prev) {
   return (current->tv_sec + current->tv_usec / 1000000.0) -
          (prev->tv_sec + prev->tv_usec / 1000000.0);
 }

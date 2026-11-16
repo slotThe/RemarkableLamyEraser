@@ -116,6 +116,13 @@ This will furthermore print some additional debugging information—great when o
 
 # Developing
 
+## Nix
+
+Run `nix build` to generate a binary.
+For clangd support you might need to invoke `make compdb` as well.
+
+## Docker
+
 There is [Dockerfile](./Dockerfile) available,
 which builds the toolchain and comes equipped with `qtcreator`.
 To build, run
